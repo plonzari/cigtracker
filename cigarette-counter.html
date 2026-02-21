@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cigarette Counter</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --accent-red: #da3633;
+            --accent-red-hover: #f85149;
+            --accent-blue: #58a6ff;
+            --border: #30363d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            color: var(--accent-blue);
+            background: rgba(88, 166, 255, 0.1);
+        }
+
+        .hero-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .stat-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .stat-box.primary::before {
+            background: linear-gradient(90deg, #da3633, #ff7b72);
+        }
+
+        .stat-box.secondary::before {
+            background: linear-gradient(90deg, #58a6ff, #1f6feb);
+        }
+
+        .stat-box h2 {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .big-number {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--text-primary);
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-primary);
+        }
+
+        .main-action-btn {
+            background: var(--accent-red);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            padding: 20px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto;
+            /* Center the button */
+            width: fit-content;
+            /* Make button hug the text */
+            padding-left: 30px;
+            padding-right: 30px;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 6px 20px rgba(218, 54, 51, 0.3);
+        }
+
+        .main-action-btn:hover {
+            background: var(--accent-red-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(218, 54, 51, 0.4);
+        }
+
+        .main-action-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 10px rgba(218, 54, 51, 0.3);
+        }
+
+        .main-action-btn span {
+            font-size: 1.8rem;
+            font-weight: 400;
+            line-height: 0.8;
+        }
+
+        .history-section {
+            margin-top: 10px;
+        }
+
+        .history-section h2 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .history-date {
+            font-weight: 600;
+        }
+
+        .history-count {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: var(--bg-color);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, 20px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <h1>CigTracker</h1>
+            <button id="share-btn" class="icon-btn" title="Share/Sync Data">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            </button>
+        </header>
+
+        <main>
+            <section class="hero-stats">
+                <div class="stat-box primary">
+                    <h2>Today</h2>
+                    <div id="today-count" class="big-number">0</div>
+                    <p>Cigarettes</p>
+                </div>
+
+                <div class="stat-box secondary">
+                    <h2>Time Since Last</h2>
+                    <div id="time-since" class="timer">00:00:00</div>
+                </div>
+            </section>
+
+            <button id="add-btn" class="main-action-btn">
+                Add Cigarette
+            </button>
+
+            <section class="history-section">
+                <h2>History</h2>
+                <div class="history-list" id="history-list">
+                    <!-- History items will be populated here by JS -->
+                </div>
+            </section>
+        </main>
+
+        <div id="toast" class="toast hidden">Link copied to clipboard!</div>
+    </div>
+
+    <script>
+        // Constants and DOM Elements
+        const STORAGE_KEY = 'cigTrackerData';
+        const todayCountEl = document.getElementById('today-count');
+        const timeSinceEl = document.getElementById('time-since');
+        const addBtn = document.getElementById('add-btn');
+        const historyListEl = document.getElementById('history-list');
+        const shareBtn = document.getElementById('share-btn');
+        const toastEl = document.getElementById('toast');
+
+        // State
+        let appData = {
+            lastCigaretteTime: null,
+            history: {} // Format: "YYYY-MM-DD": count
+        };
+
+        // Intialize App
+        function init() {
+            loadData();
+            checkUrlHashForImport();
+            updateUI();
+            setInterval(updateTimer, 1000);
+        }
+
+        // Get today's date string (YYYY-MM-DD) based on local time
+        function getTodayString() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    appData = JSON.parse(stored);
+                    if (!appData.history) appData.history = {};
+                } catch (e) {
+                    console.error("Error parsing local storage data", e);
+                }
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        }
+
+        // Update the UI components
+        function updateUI() {
+            const today = getTodayString();
+
+            // Update counter
+            const todayCount = appData.history[today] || 0;
+            todayCountEl.textContent = todayCount;
+
+            // Update timer immediately
+            updateTimer();
+
+            // Render History
+            renderHistory();
+        }
+
+        // Update the "Time Since Last" display
+        function updateTimer() {
+            if (!appData.lastCigaretteTime) {
+                timeSinceEl.textContent = "--:--:--";
+                return;
+            }
+
+            const now = new Date().getTime();
+            const diffMs = now - appData.lastCigaretteTime;
+
+            if (diffMs < 0) {
+                timeSinceEl.textContent = "00:00:00";
+                return;
+            }
+
+            // Calculate hours, minutes, seconds
+            const hours = Math.floor(diffMs / (1000 * 60 * 60));
+            const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+
+            // Format with leading zeros for minutes and seconds
+            const mStr = String(minutes).padStart(2, '0');
+            const sStr = String(seconds).padStart(2, '0');
+
+            // Format as 0h:00m:00s
+            timeSinceEl.textContent = `${hours}h:${mStr}m:${sStr}s`;
+        }
+
+        // Add a cigarette
+        function addCigarette() {
+            const today = getTodayString();
+
+            // Increment count
+            if (!appData.history[today]) {
+                appData.history[today] = 0;
+            }
+            appData.history[today]++;
+
+            // Update timer
+            appData.lastCigaretteTime = new Date().getTime();
+
+            saveData();
+            updateUI();
+
+            // Small animation effect on the button
+            addBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                addBtn.style.transform = '';
+            }, 100);
+        }
+
+        // Render the history list
+        function renderHistory() {
+            historyListEl.innerHTML = '';
+            const today = getTodayString();
+
+            // Get all dates except today, sorted descending
+            const pastDates = Object.keys(appData.history)
+                .filter(date => date !== today)
+                .sort((a, b) => new Date(b) - new Date(a));
+
+            if (pastDates.length === 0) {
+                historyListEl.innerHTML = '<p style="color: var(--text-secondary); text-align: center; font-size: 0.9rem;">No history yet.</p>';
+                return;
+            }
+
+            pastDates.forEach(date => {
+                // Format date better for display (e.g. "Oct 15, 2023")
+                const dateObj = new Date(date + 'T00:00:00'); // Prevent timezone shift
+                const displayDate = dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+
+                const count = appData.history[date];
+
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <span class="history-date">${displayDate}</span>
+                    <span class="history-count">${count}</span>
+                `;
+                historyListEl.appendChild(item);
+            });
+        }
+
+        // --- SYNC / SHARE FEATURE ---
+
+        function shareData() {
+            const jsonStr = JSON.stringify(appData);
+            const encodedData = btoa(unescape(encodeURIComponent(jsonStr)));
+
+            const baseUrl = window.location.href.split('#')[0];
+            const shareUrl = `${baseUrl}#data=${encodedData}`;
+
+            window.location.replace(shareUrl);
+            showToast("URL updated! You can now save this page as a bookmark.");
+        }
+
+        function checkUrlHashForImport() {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#data=')) {
+                const encodedData = hash.replace('#data=', '');
+                try {
+                    const decodedJsonStr = decodeURIComponent(escape(atob(encodedData)));
+                    const importedData = JSON.parse(decodedJsonStr);
+
+                    mergeData(importedData);
+
+                    window.history.replaceState(null, null, window.location.pathname + window.location.search);
+                    alert("Data successfully imported and merged!");
+                } catch (e) {
+                    console.error("Failed to parse imported data:", e);
+                    alert("Failed to import data from link. The link might be invalid or corrupted.");
+                }
+            }
+        }
+
+        function mergeData(importedData) {
+            if (!importedData || !importedData.history) return;
+
+            let changed = false;
+
+            for (const [date, count] of Object.entries(importedData.history)) {
+                if (!appData.history[date] || count > appData.history[date]) {
+                    appData.history[date] = count;
+                    changed = true;
+                }
+            }
+
+            if (importedData.lastCigaretteTime) {
+                if (!appData.lastCigaretteTime || importedData.lastCigaretteTime > appData.lastCigaretteTime) {
+                    appData.lastCigaretteTime = importedData.lastCigaretteTime;
+                    changed = true;
+                }
+            }
+
+            if (changed) {
+                saveData();
+            }
+        }
+
+        function showToast(message = "Link copied to clipboard!") {
+            toastEl.textContent = message;
+            toastEl.classList.remove('hidden');
+            setTimeout(() => {
+                toastEl.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Event Listeners
+        addBtn.addEventListener('click', addCigarette);
+        shareBtn.addEventListener('click', shareData);
+
+        // Start
+        init();
+    </script>
+</body>
+
+</html>
