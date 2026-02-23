@@ -57,6 +57,13 @@
             color: var(--text-primary);
         }
 
+        main {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            /* Reduced space between all sections */
+        }
+
         .icon-btn {
             background: transparent;
             border: none;
@@ -139,8 +146,10 @@
             color: white;
             border: none;
             border-radius: 16px;
-            padding: 20px;
-            font-size: 1.25rem;
+            padding: 24px 40px;
+            /* Increased padding */
+            font-size: 1.5rem;
+            /* Increased font size */
             font-weight: 600;
             cursor: pointer;
             display: flex;
@@ -148,41 +157,48 @@
             justify-content: center;
             gap: 10px;
             margin: 0 auto;
-            /* Center the button */
+            /* Center alignment relying on flex alignment */
             width: fit-content;
-            /* Make button hug the text */
-            padding-left: 30px;
-            padding-right: 30px;
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 6px 20px rgba(218, 54, 51, 0.3);
         }
 
         .main-action-btn:hover {
             background: var(--accent-red-hover);
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.02);
+            /* Slight scale on hover for more impact */
             box-shadow: 0 8px 25px rgba(218, 54, 51, 0.4);
         }
 
         .main-action-btn:active {
-            transform: translateY(2px);
+            transform: translateY(2px) scale(0.98);
             box-shadow: 0 2px 10px rgba(218, 54, 51, 0.3);
         }
 
         .main-action-btn span {
-            font-size: 1.8rem;
+            font-size: 2rem;
+            /* Make any icon inside larger */
             font-weight: 400;
             line-height: 0.8;
         }
 
-        .history-section {
-            margin-top: 10px;
+        .history-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
         }
 
-        .history-section h2 {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
+        .history-card h2 {
+            font-size: 1.5rem;
+            /* Larger font size */
+            margin-bottom: 20px;
             text-align: center;
-            color: var(--text-secondary);
+            color: var(--text-primary);
+            /* Stand out more */
+            font-weight: 800;
         }
 
         .history-list {
@@ -195,10 +211,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
+            padding: 12px 0;
+            /* Simpler padding inside card */
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
         }
 
         .history-date {
@@ -241,16 +260,33 @@
     <div class="app-container">
         <header>
             <h1>CigTracker</h1>
-            <button id="share-btn" class="icon-btn" title="Share/Sync Data">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="18" cy="5" r="3"></circle>
-                    <circle cx="6" cy="12" r="3"></circle>
-                    <circle cx="18" cy="19" r="3"></circle>
-                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                </svg>
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button id="download-btn" class="icon-btn" title="Download History">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+                <button id="reset-btn" class="icon-btn" title="Reset Data">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                        <path d="M3 3v5h5"></path>
+                    </svg>
+                </button>
+                <button id="share-btn" class="icon-btn" title="Share/Sync Data">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"></circle>
+                        <circle cx="6" cy="12" r="3"></circle>
+                        <circle cx="18" cy="19" r="3"></circle>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                </button>
+            </div>
         </header>
 
         <main>
@@ -271,7 +307,7 @@
                 Add Cigarette
             </button>
 
-            <section class="history-section">
+            <section class="history-card">
                 <h2>History</h2>
                 <div class="history-list" id="history-list">
                     <!-- History items will be populated here by JS -->
@@ -284,21 +320,22 @@
 
     <script>
         // Constants and DOM Elements
-        const STORAGE_KEY = 'cigTrackerData';
+        const STORAGE_KEY = 'cigTrackerDataV2';
         const todayCountEl = document.getElementById('today-count');
         const timeSinceEl = document.getElementById('time-since');
         const addBtn = document.getElementById('add-btn');
         const historyListEl = document.getElementById('history-list');
         const shareBtn = document.getElementById('share-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const downloadBtn = document.getElementById('download-btn');
         const toastEl = document.getElementById('toast');
 
         // State
         let appData = {
-            lastCigaretteTime: null,
-            history: {} // Format: "YYYY-MM-DD": count
+            cigarettes: [] // Array of timestamps (ms since epoch)
         };
 
-        // Intialize App
+        // Initialize App
         function init() {
             loadData();
             checkUrlHashForImport();
@@ -306,7 +343,57 @@
             setInterval(updateTimer, 1000);
         }
 
-        // Get today's date string (YYYY-MM-DD) based on local time
+        // Load data from localStorage
+        function loadData() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    if (parsed && Array.isArray(parsed.cigarettes)) {
+                        appData.cigarettes = parsed.cigarettes;
+                    }
+                } catch (e) {
+                    console.error("Error parsing local storage data", e);
+                }
+            } else {
+                // Attempt to migrate old data if it exists
+                const oldStored = localStorage.getItem('cigTrackerData');
+                if (oldStored) {
+                    try {
+                        const parsed = JSON.parse(oldStored);
+                        if (parsed && parsed.lastCigaretteTime) {
+                            appData.cigarettes = [parsed.lastCigaretteTime];
+                            saveData();
+                        }
+                    } catch (e) {
+                        console.error("Error parsing old local storage data", e);
+                    }
+                }
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            appData.cigarettes.sort((a, b) => a - b);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+        }
+
+        // Helper: Calculate daily counts from timestamps
+        function getHistoryByDate() {
+            const history = {};
+            appData.cigarettes.forEach(ts => {
+                const dateObj = new Date(ts);
+                const year = dateObj.getFullYear();
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const day = String(dateObj.getDate()).padStart(2, '0');
+                const dateStr = `${year}-${month}-${day}`;
+
+                if (!history[dateStr]) history[dateStr] = 0;
+                history[dateStr]++;
+            });
+            return history;
+        }
+
         function getTodayString() {
             const now = new Date();
             const year = now.getFullYear();
@@ -315,84 +402,50 @@
             return `${year}-${month}-${day}`;
         }
 
-        // Load data from localStorage
-        function loadData() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                try {
-                    appData = JSON.parse(stored);
-                    if (!appData.history) appData.history = {};
-                } catch (e) {
-                    console.error("Error parsing local storage data", e);
-                }
-            }
-        }
-
-        // Save data to localStorage
-        function saveData() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
-        }
-
         // Update the UI components
         function updateUI() {
+            const history = getHistoryByDate();
             const today = getTodayString();
 
-            // Update counter
-            const todayCount = appData.history[today] || 0;
+            const todayCount = history[today] || 0;
             todayCountEl.textContent = todayCount;
 
-            // Update timer immediately
             updateTimer();
-
-            // Render History
-            renderHistory();
+            renderHistory(history, today);
         }
 
         // Update the "Time Since Last" display
         function updateTimer() {
-            if (!appData.lastCigaretteTime) {
+            if (appData.cigarettes.length === 0) {
                 timeSinceEl.textContent = "--:--:--";
                 return;
             }
 
+            const lastCig = appData.cigarettes[appData.cigarettes.length - 1];
             const now = new Date().getTime();
-            const diffMs = now - appData.lastCigaretteTime;
+            const diffMs = now - lastCig;
 
             if (diffMs < 0) {
                 timeSinceEl.textContent = "00:00:00";
                 return;
             }
 
-            // Calculate hours, minutes, seconds
             const hours = Math.floor(diffMs / (1000 * 60 * 60));
             const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
 
-            // Format with leading zeros for minutes and seconds
             const mStr = String(minutes).padStart(2, '0');
             const sStr = String(seconds).padStart(2, '0');
 
-            // Format as 0h:00m:00s
             timeSinceEl.textContent = `${hours}h:${mStr}m:${sStr}s`;
         }
 
         // Add a cigarette
         function addCigarette() {
-            const today = getTodayString();
-
-            // Increment count
-            if (!appData.history[today]) {
-                appData.history[today] = 0;
-            }
-            appData.history[today]++;
-
-            // Update timer
-            appData.lastCigaretteTime = new Date().getTime();
-
+            appData.cigarettes.push(new Date().getTime());
             saveData();
             updateUI();
 
-            // Small animation effect on the button
             addBtn.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 addBtn.style.transform = '';
@@ -400,12 +453,10 @@
         }
 
         // Render the history list
-        function renderHistory() {
+        function renderHistory(history, today) {
             historyListEl.innerHTML = '';
-            const today = getTodayString();
 
-            // Get all dates except today, sorted descending
-            const pastDates = Object.keys(appData.history)
+            const pastDates = Object.keys(history)
                 .filter(date => date !== today)
                 .sort((a, b) => new Date(b) - new Date(a));
 
@@ -418,8 +469,7 @@
                 // Format date better for display (e.g. "Oct 15, 2023")
                 const dateObj = new Date(date + 'T00:00:00'); // Prevent timezone shift
                 const displayDate = dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-
-                const count = appData.history[date];
+                const count = history[date];
 
                 const item = document.createElement('div');
                 item.className = 'history-item';
@@ -454,8 +504,8 @@
 
                     mergeData(importedData);
 
+                    // Clear the hash without reloading the page
                     window.history.replaceState(null, null, window.location.pathname + window.location.search);
-                    alert("Data successfully imported and merged!");
                 } catch (e) {
                     console.error("Failed to parse imported data:", e);
                     alert("Failed to import data from link. The link might be invalid or corrupted.");
@@ -464,26 +514,34 @@
         }
 
         function mergeData(importedData) {
-            if (!importedData || !importedData.history) return;
+            // No data in the URL means nothing changes in local storage
+            if (!importedData || !Array.isArray(importedData.cigarettes) || importedData.cigarettes.length === 0) {
+                return;
+            }
 
+            const currentSet = new Set(appData.cigarettes);
             let changed = false;
 
-            for (const [date, count] of Object.entries(importedData.history)) {
-                if (!appData.history[date] || count > appData.history[date]) {
-                    appData.history[date] = count;
+            // Only missing cigarettes are added
+            importedData.cigarettes.forEach(ts => {
+                if (!currentSet.has(ts)) {
+                    appData.cigarettes.push(ts);
                     changed = true;
                 }
-            }
-
-            if (importedData.lastCigaretteTime) {
-                if (!appData.lastCigaretteTime || importedData.lastCigaretteTime > appData.lastCigaretteTime) {
-                    appData.lastCigaretteTime = importedData.lastCigaretteTime;
-                    changed = true;
-                }
-            }
+            });
 
             if (changed) {
-                saveData();
+                saveData(); // saveData handles sorting them chronologically
+                alert("Data successfully merged from URL!");
+            }
+        }
+
+        function resetData() {
+            if (confirm("Are you sure you want to reset all data?")) {
+                appData = { cigarettes: [] };
+                localStorage.removeItem(STORAGE_KEY);
+                updateUI();
+                showToast("Data reset.");
             }
         }
 
@@ -495,9 +553,38 @@
             }, 3000);
         }
 
+        function downloadHistory() {
+            if (appData.cigarettes.length === 0) {
+                alert("No history to download.");
+                return;
+            }
+
+            let content = "Cigarette History (Ordered)\n";
+            content += "===========================\n\n";
+
+            appData.cigarettes.forEach((ts, index) => {
+                const dateObj = new Date(ts);
+                const displayDate = dateObj.toLocaleDateString();
+                const displayTime = dateObj.toLocaleTimeString();
+                content += `${index + 1}. ${displayDate} ${displayTime}\n`;
+            });
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `CigTracker_History_${getTodayString()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
         // Event Listeners
         addBtn.addEventListener('click', addCigarette);
         shareBtn.addEventListener('click', shareData);
+        resetBtn.addEventListener('click', resetData);
+        downloadBtn.addEventListener('click', downloadHistory);
 
         // Start
         init();

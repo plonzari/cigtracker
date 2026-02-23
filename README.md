@@ -7,12 +7,12 @@ A simple, fast, and secure single-page web application to track your daily cigar
 - **Local-First Design:** All data is stored directly in your browser's `localStorage` meaning no servers, no accounts, and complete privacy.
 - **Single-File Architecture:** The entire app—HTML, CSS, and JS logic—lives in one incredibly lightweight file (`index.html`), making it lightning fast and simple to host anywhere.
 - **Cross-Device Sync:** Instantly sync your history between your desktop and smartphone by generating a secure `#data` URL hash, which you can easily bookmark or share. 
-- **Conflict Resolution:** When syncing a session, the app smartly merges both histories by keeping the highest historical counts to prevent data loss.
+- **Conflict Resolution (Accidental Enterprise Architecture):** Under the hood, this uses a fancy distributed systems concept called a **CRDT (Conflict-free Replicated Data Type)**—specifically a G-Set (Grow-only Set). Basically, because you mathematically cannot "un-smoke" a cigarette in the past, merging two histories from different devices is just a simple, conflict-free union of two sets. Yes, this humble smoking tracker uses the same replication math as Amazon DynamoDB. You're welcome.
 - **Live Timer:** See exactly how many hours, minutes, and seconds have passed since your last cigarette right on the dashboard.
 
 ## Live Demo
 
-[Live CigTracker App](https://plonzari.github.io/cigtracker/)
+[Live CigTracker App](https://plonzari.github.io/cigtracker/cigarette-counter.html)
 
 ## Syncing Between Devices
 
